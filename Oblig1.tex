@@ -1,0 +1,201 @@
+Chapter 1
+Theory Questions
+1. Forklar kort hva som er de to hovedoppgavene til et operativsystem.
+	Ett operativsystem fungerer som ett lag mellom maskinvare og programvare, effekten man oppnår fra dette er at applikasjonene får ett vakkert API/Interface å snakke med, mens operativsystemet tar seg av den skittne jobben med å snakke med maskinvaren(drivere). I tilegg oppfører operativsystemet seg som en "prosjektleder" som delegerer ut systemressurser til prosseser som trenger det/spørr om det. Dette gir fordeler som multiprogramming isteden for batch prossesering hvor man har en sekvensiell ekskevering.
+
+2. Hva het det operativsystemet som anses som forløperen til UNIX og når omtrent ble UNIX lansert første gang? Hvem skrev den første utgaven av UNIX?
+	Foreløperen til UNIX var Multics(utviklet på 60-tallet for å enable timesharing på stormaskiner/mainframes), UNIX ble annonsert i 1973 av Bell labs, men det hadde da allerede vært i bruk internt siden 1971.
+
+3. Hva mener vi med begrepet multiprogrammering og hvilke fordeler innebærer dette i forhold til ren batch-kjøring.
+	Begrepet multiprogrammering betyr at vi snakker om en datamaskin som kan holde flere programmer i minne samtidig, i motsettning til tidligere hvor en maskin kjørte 1 program av gangen. En av de store fordelene dette gav umidelbart var at man kunne designe systemer som flere bruker kunne være logget på samtidig og dele ressursene på systemet. 
+
+Lab Exercises
+
+DONE!!!
+
+Chapter 2
+
+Theory Questions
+
+1. Hva er et “Directive” i assemblykode?
+
+Direktiver er informasjon for Assembler programmet. Direktivene er kalt "pseudo-opcodes" i motsetning til de vanlige "opcodes" som er arkitektur spesefikk instruksjoner til CPU´en ved runtime. Direktivene er instruksjoner Assembler programmet utfører når Assembly koden blir oversatt til maskinkode. Feks .file som er brukt til debugging og inneholder informasjon om filnavnet som er brukt for å generere assemblykoden. .text tilsier at den neste blokken inneholder koden, mens .data tilsier at neste blokk inneholder data.
+
+2. Hva forbinder du med begrepene superskalar og pipelining i en prosessor?
+Superskalar bruker vi om prossesorer som inneholder flere eneheter for ekskevering av instruksjoner, f.eks APU eller FPU, men den må også kunne bruke disse enhetene parralelt. Dette tilater en CPU til å utføre flere operasjoner samtidig (på samme klokkefrekvens). Pipelineing er en annen måte å effektivisere CPU´er på uten å måtte øke klokkefrekvensen, den innebærer at vi lager ett "rør" igjennom "Fetch-Unit" -> "Decode Unit" -> "Execute Unit". Dette røret fylles på kontinuerlig sånn at ingen av "unit"´ene er tomme. F.eks "Fetch unit" henter inn data fra minnet, sender til til "Decode Unit" og henter inn ny data fra minnet på neste klokkeslag. Alternativet hadde vært at man lot 1 instruksjon gå igjennom hele "røret" før man fylte på med mer data. 
+
+3. Hva menes med kernel mode og user mode?
+
+Kernel mode og User mode er to forskjellige moduser cpuen har for å skille på hvilke rettighter koden som kjøres har. Kernel mode kontektsen bruker når operativsystemspesefikk kode kjøres og den har dermed tillatelse for å bruke I/O enheter. User mode har ikke tilgang til I/O enheter og brukes når applikasjonspesefikk kode kjøres. Switching mellom disse to modusene organisers ved bruk av PSW registret hvor ett flag settes for å indikere om CPU´en er i kernel eller user mode. Å bytte mellom kernel og user mode koster 100~nanosekunder, mens en applikasjonsswitch i user mode koster mikrosekunder (kalles også kontekstswitching )
+
+4. Hva menes med hyperthreading/multithreading som ble innført med Pentium 4? Hva var hensikten med dette?
+
+Hyperthreading var en av de store nyhetne når Pentium 4 kom da det gav muligheter for å behandele flere tråder "samtidig", i utgangspunktet hadde vi allerede multiprogramming som tilot maskiner å behandler flere programmer samtidig, men i realiteten var bare maskinen rask til å bytte kontekster mellom forskjellige applikasjoner. Det hyperthreading gjør er at maskinen ble enda raskere på denne kontekst switchen mellom to kontekster ettersom den kunne ha to sett med register informasjon lagret samtidig ettersom hyperthreading la til ett ekstra sett med register. 
+
+5. Hva er ulempen ved en direkte mappet (“direct mapped”) cache?
+
+Direkte mappet cache lagrer bare informasjonen direkte uten å ta hensikt til hva den skriver over. Ulempen med dette er at cachen ikke tar vare på mye brukt informasjon, med mindre du har "flaks". Dette øker lastetiden om mye brukt informasjon må lastes på nytt hver gang.
+
+6. Anta en CPU som skal sjekke om dataene på gitt adresse i minne finnes i en sett-assosiativ cache. Hvordan finner CPU’en frem til riktig sett og riktig vei (“way”)?
+
+Ved å bruke bit 6 tilogmed bit 11 i minneaddressen finner CPU´en ut hvilken linje/sett for hvor dataen kan lagres, mens riktig way finner den ved å bruke ett tag system hvor hver way som inneholder data er markert med en tag basert på hvor dataen kommer fra. (Som duartes sier det; "the tag is simply the number for the page where the line came from.") 
+
+7. Nevn tre måter interrupt kan oppstå i en datamaskin.
+
+Hardware interupt typisk for IO enheter(tastatur, disk, e.l) , Software interupt(Systemkall, "signal" som sendes fra usermode applikasjoner til kernelen at noe har skjedd) og exceptions(Predefinerte events som gjør at CPU´en kaller en interupt, som feks forsøk med deling på 0).
+
+8. Hvor store cache lines har en 2-veis sett-assosiativ cache som er 32KB stor og har 128 sett?
+     32KB = 2^15, 128 = 2^8
+	2^15 / 2^8 = 2^7
+	2-veis = 2^1
+	2^7 / 2^1 = 2^6
+	Cache lines = 2^6  
+
+	Litt usikker på utregning, men total plass er 2^15 bits (32KB), deler på antall sett 2^8, deler deretter resultatet på antall veier 2^1, dermed 2^15-8-1 = 2^6
+
+Lab Exercises
+
+1. Forklar hva hver linje i følgende assemblykode gjør:
+
+Linje:
+01	.text 			# Tekst direktiv, Read-Only informasjon til assembleren
+02  .globl main 		# .globl forteller assemblern at main funksjonen skal være globalt tilgjengelig
+03  main: 			# : indikerer at dette er en label, main er navnet på funksjonen 
+04 	pushq %rbp		# push legger %rbp på stacken
+05 	movq  %rsp, %rbp	# Setter %rbp til %rsp (base pointer peker på samme som stack pointer)
+06	movl  $0, -4(%rbp)	# $0 er tallet 0, -4(%rbp) referer til adressen som er 4 før (%rbp)
+07	cmpl  $0, -4(%rbp)	# sammenligner 0 med innholdet i -4(%rbp) og legger svaret i ZF flagget(0 hvis ulike, 1 hvis like)
+08	jne   .L2		# Hvis cmpl på linje 7 setter ZF til 0, hopper programmet til L2  
+09	addl $1, -4(%rbp)	# addl legger til 1 til hva som enn er lagret i adressen til -4(%rbp) 
+10 .L2:				# Lable for funksjonen L2, kalles fra linje 8
+11 	movl $0, %eax		# mov legger 0 i eax registret
+12	leave			# Resetter den lokale stacken i L2
+13	ret			# Returner til der kallet kom fra
+
+C Koden :
+	int main ( void ) {
+		int i = 0;
+		if(i == 0){
+			i += 1;
+		}		
+		return 0;
+	}	
+2. Forklar hva hver linje i følgende assemblykode gjør:
+
+Linje:
+01	.text 			# Tekst direktiv, Read-Only informasjon til assembleren
+02 .globl main			# .globl forteller assemblern at main funksjonen skal være globalt tilgjengelig
+03 main:			# : indikerer at dette er en label, main er navnet på funksjonen 
+04	pushq %rbp		# push legger %rbp på stacken
+05	movq %rsp, %rbp		# Setter %rbp til %rsp (base pointer peker på samme som stack pointer)
+06	movl $0, -4(%rbp)	# $0 er tallet 0, -4(%rbp) referer til adressen som er 4 før (%rbp)
+07	jmp .L2			# Hopp til .L2 label
+08 .L3:				# Label, .L3
+09	adll $1, -4(%rbp)	# Legger til 1 til det som ligger i -4(%rbp)
+10	adll $1, -4(%rbp)	# Legger til 1 til det som ligger i -4(%rbp)
+11 .L2				# Label, .L2
+12	cmpl $9, -4(%rbp) 	# Sammenlign det som ligger i -4(%rbp) med 9 og lagrer resultat i et flag register
+13	jle .L3			# Hopp til .L3 hvis -4(%rbp) er mindre eller lik 9
+14	movl $0, %eax		# legger 0 i %eax registret
+15	leave			# Resetter den lokale stacken
+16	ret			# returnerer til der kallet kom fra
+
+C Koden: # Måtte kompile den med -std=gnu99 for å få lov til å deklarere int inne i for statementet.
+
+int main( void ) {
+
+	for(int i = 0; i <= 9; n++){
+		n++;
+	}
+
+return 0;
+
+}
+
+Chapter 3
+
+Theory questions
+
+1. Hva menes med preemptive og non-preemptive operativsystemer?
+
+Et preemptive OS gir enkelt applikasjoner ett begrenset tidsrom for når de kan kjøre Etter at tidsrommet er tomt går OS´et inn og stopper (preempts) applikasjonen og gir neste applikasjon tilgang. I ett non-preemptive system må enten applikasjonen få kjøre ferdig, eller selv gi opp kontroll til neste applikasjon og satse på at de andre applikasjonene sammarbeider og gir kontrollen tilbake på sikt.( Cooperative multitasking )
+
+2. Hva mener vi når vi sier at et OS er et monolittisk system? Nevn eksempel på OS med en slik design.
+
+Et monolittisk operativsystem har samlet masse kode (drivere, minnebehandling, prossesmanager, osv) i en stor kjørbar fil(kernelen) med det resultatet at all den koden kjøres i kernel mode. Fordelen med dette sammenlignet med ett mikrokernel system er at det er færre kontekst switsjes mellom user mode og kernel mode. Ulempen er at man har mer kode som kan være ustabil og ta ned hele systemet siden det kjøres i kernel mode.
+I kompendiet blir Linux og Windows tatt fra som OS som bruker monolittisk design, men også Unix kloner som BSD er designet på denne måten.
+ 
+3. Hva mener vi når vi sier at en trend innen OS-design har gått i retning av microkernel? Hvilke fordeler gir ett slik OS-design?
+
+Vi kan se en trend innenfor "container-based" virtualiseringsløsninger alá docker at man har ett ønske om en microkernel, men denne ligger bare som et lag mellom host os´et og applikasjonen som kjører i kontaineren. Det finnes også en god del microkerneler for embedded devices, men i dette markedet går trenden motsatt vei ettersom man endelig har fått nok kraft til å kjøre Linux kernelen. Fordelene til ett microkernel OS er jo stabilitet og sikkerhet. Man har en liten kodebase som har mulighet til å kjøre i kernelmode, og alt annet kjører i usermode. Dette gjør det også mulig å lage mer stabilie OS ettersom det er mindre kode som kan ta ned hele systemet.
+
+4. Forklar sammenhengen mellom systemkall, kommandoer og instruksjoner. Gi eksempler.
+
+5. Beskriv mest mulig detaljert hva som skjer når systemkallet read(fd,&buffer,nbytes) utføres.
+
+6. Hvilke utskrifter kan vi få når denne koden kjøres om vi forutsetter at fork() systemkallet ikke feiler?
+
+main() {
+	int p;
+	p = fork();
+	printf ("%d \n", p);
+}
+
+Lab Exercises
+
+1. Skriv en kommandolinje som teller antall prosesser som eies av root. Start kommandolinjen med kommandoen ps aux.
+
+One-liner for antall prosseser som kjører under root;
+
+ps aux | awk '{print $1}' | grep -c root
+
+2. Last ned C-kode eksemplene fra forelesningen (fork eksemplene) og studer de nøye.
+
+Done
+
+3. Kommandolinjeargumenter og systemkall
+
+Done
+
+4. GNU Make
+
+http://www.gnu.org/software/make/
+http://www.gnu.org/prep/standards/html_node/Makefile-Conventions.html#Makefile-Conventions
+
+Chapter 4
+
+Theory questions
+
+1. Hva er en prosess i et operativsystem?
+
+En prosess er en kontainer for et kjørende program og brukes av operativsystemet for å holde styr på flere kjørende programmer.
+
+2. Beskriv tre viktige tilstander en prosess kan befinne seg i.
+
+Kjørende, Klar/venter og blokkert. Kjørende tilstand tilsier at koden i prossesen blir behandlet av cpu´en, klar/venter tilsier at prosessen venter på å få tid på cpu´en fra schedueleren og blokkert tilsier at prossesen venter på at IO enheter skal bli ferdig med en request.
+
+3. Hva er en prosesskontrollblokk (PCB) og hva inneholder den?
+
+En PCB er en tabell med informasjon om en enkelt prosses og den inneholder informasjon som er nødvendig for utførelsen av prossesen, som feks: prossesbehandling, minnebehandling og filebehandling.
+
+4. Lag en liste over egenskaper som deles av tråder i en prosess og egenskaper som er unike for hver tråd.
+
+Tråder deler addresse rom, globale variabler, åpne filer, child-prosseser og signals, mens de hver for seg har program counters, registerkontroll, en stack og en egen state.
+
+5. Hva skjer om vi får et blokkerende I/O-kall i en tråd på user level?
+
+Hele prossesen(alle trådene) blir blokkert.
+
+6. Forklar hvilke (og hvor mange) trådtabeller som finnes når:
+ - tråder kjøres på user level?
+ Da finnes det ett run-time-system inne i hver enkelt applikasjon som ønsker å bruke tråder.
+ - tråder kjøres på kernel level?
+ Da finnes det ett run-time-system i OS´et som holder oversikt over alle PIDs og TIDs.
+
+Lab Exercises
+
+1. Skriv en kommandolinje som starter med kommandoen ps aux og deretter bruker awk til bare a ̊ skrive ut prosesstatus (kolonne 8) og prosessnavn (kolonne 11).
+
+ps aux | awk '{print $8, $11}'
+
+2. 
