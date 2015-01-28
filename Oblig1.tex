@@ -194,8 +194,23 @@ Hele prossesen(alle trådene) blir blokkert.
 
 Lab Exercises
 
-1. Skriv en kommandolinje som starter med kommandoen ps aux og deretter bruker awk til bare a ̊ skrive ut prosesstatus (kolonne 8) og prosessnavn (kolonne 11).
+1. Skriv en kommandolinje som starter med kommandoen ps aux og deretter bruker awk til bare å skrive ut prosesstatus (kolonne 8) og prosessnavn (kolonne 11).
 
 ps aux | awk '{print $8, $11}'
 
-2. 
+2. Sendt mail for tilbakemelding
+
+3.  Hvordan telles variabelen g_ant? Forklar kort hva som skjer.  (Prosses forks)
+
+Variablen g_ant iniatialisers til 0 globalt og main funksjonen starter en ny prosses via fork. Den nye child-prossesen kopierer g_ant som 0 og begynner å kjøre løkka på den. Samtidig kjører parent-prossesen å kjøre løkka på den orginale versjonen av g_ant. Derfor telle begge prossesene g_ant til 30 før de avslutter.
+
+4. Hvordan telles variabelen g ant? Forklar kort hva som skjer. (tråder)
+
+Variablen g_ant iniatialisere til 0 globalt. Main funksjonen starter 1 tråd og kjører funksjonskallet writeloop, tråden kjører også funksjonskallet writeloop. I motsettning til fork (flere prosseser) behandler trådene samme instans av g_ant og den blir dermed bare telt opp til 30 en gang.
+
+Chapter 5
+
+Theory questions
+
+1. I læreboka figur 2.21 finnes et eksempel med to prosesser som ønsker utskrift. Hvilken prosess sørger for å hente utskriftfilene fra spooler directory? Hvorfor kan det gå galt med denne løsningen?
+

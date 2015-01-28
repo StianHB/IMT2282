@@ -52,6 +52,7 @@ int main( void ) {
 		process(5,3);
 		return 0;
 	}
-
+    waitpid(r, NULL, 0);
+	waitpid(q, NULL, 0);
 	return 0;
 }
