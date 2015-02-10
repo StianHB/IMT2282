@@ -20,12 +20,11 @@ int g_idx;              /* index to next available slot in buffer,
                            according to C standard, so no init needed  */
 
 int main( int argc, char *argv[] ) {
-	pthread_t pid, cid;
  	int N = 1; 
 	if( argc == 2) {
 		N = atoi(argv[1]);
 	} 
-		
+	pthread_t pid[N], cid[N];
 	// Initialie the semaphores
 	sem_init(&empty, SHARED, BUF_SIZE);
 	sem_init(&full, SHARED, 0);
@@ -34,13 +33,13 @@ int main( int argc, char *argv[] ) {
 	// Create the threads
 	printf("main started\n");
 	for(int i = 0; i < N; i++) {	
-		pthread_create(&pid, NULL, Producer, NULL);
-		pthread_create(&cid, NULL, Consumer, NULL);
+		pthread_create(&pid[N], NULL, Producer, NULL);
+		pthread_create(&cid[N], NULL, Consumer, NULL);
 	}
 	// And wait for them to finish.
 	for(int i = 0; i < N; i++) {
-		pthread_join(pid, NULL);
-		pthread_join(cid, NULL);
+		pthread_join(pid[N], NULL);
+		pthread_join(cid[N], NULL);
 	}
 	printf("main done\n");
 
