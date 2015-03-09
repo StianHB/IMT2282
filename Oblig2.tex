@@ -1,0 +1,90 @@
+Chapter 7
+
+Theory Questions
+
+1. Hva brukes en bitmap til i forbindelse med minnehåndtering i et page-basert minne?
+
+Bitmap benyttes for å holde rede på ledig plass, gjerne i RAM eller på disk. Ettersom bitmap ikke trenger så stor plass for å adressere store minnemengder er det relativt effektivt.
+
+2. Hvilke felter finnes i en Pagetable Entry ?
+
+En pagetable entry er delt opp i flere felt, present/absent bit, modified bit, referenced bit, caching disabled bit, den inneholder også pekeren mellom det virtuelle minnet og det fysiske minnet. Muligens også adresse rom eller PID til eier.
+Se http://en.wikipedia.org/w/index.php?title=Page_table&oldid=641651423#Page_table_data
+
+3.  Hvilke prinsipper kan vi benytte for å redusere størrelsen på en pagetable i internminnet?
+
+Vi har to prinsipper for å redusere størrelsen på en pagetabel, for det første kan vi dele den opp i flere lag - "Multilevel page table" - noe som gir oss mulighet till å kun holde på pages til de pagene som er i bruk nå og kan også la oss skalere opp tabellene ved behov. Ett annet prinsipp er "Inverted page table", hvor man har page frames adressert i stedet for en entry i en page fram adressert. Dette fører til økt kompleksitet for å gå fra virtuellet til fysisk minne. For å løse det har man en TLB for å huske de mest brukte.
+
+ 4. Affinity scheduling (“CPU pinning”) reduserer antall cache misser. Reduseres også antall TLB misser? Reduseres også antall page faults? Begrunn svaret.
+
+Antall TLB misses reduseres ikke av CPU pinning ettersom det kun er en TLB i maskinen. Dette gjør også at page faults ikke blir redusert.
+ 
+http://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf
+
+5. Hvor stor blir en bitmap i et page-inndelt minnesystem med pagestørrelse 4KB og internminne på 512MB?
+
+512MB = 2^28 
+4KB   = 2^12 
+
+Antall 4KB pages i 512MB minne = 2^28 / 2^12 = 65 536
+1 page krever 1 bit = 65 536 bits = 2^16 
+
+Bitmappet blir 2^16 stort.
+
+6. Tanenbaum oppgave 3.5
+For each of the following decimal virtual addresses, compute the virtual page number and offset for a 4K page and for an 8K page: 20000, 32768, 60000. 
+
+Virtual Page number ved 4K pages starter på page 0 mellom 0 - 4095 og er 0 + N for hver multiple av 4096 oppover. Vi kan dermed finne VPN for den desimale representasjonen av den virtuelle adressen ved å bruke heltalls deling på 4096. 
+20000/4096 = 4
+4*4096 = 16384 
+20000 - 16384 = 3616
+Adresse 20 000 ligger i virtual page 4 med en offset på 3616
+
+32768/4096 = 8
+8*4096 = 32768
+32768-32768 = 0
+Adresse 32768 ligger i virtual page 8 med en offset på 0
+
+60000/4096 = 14
+14*4096 = 57344
+60000-57344 = 2656
+Adresse 60000 ligger i virtual page 14 med en offset på 2656
+
+20000/8192 = 2
+2*8192 = 16384
+20000-16384 = 3616
+Adresse 20000 ligger i virtual page 2 med en offset 3616
+
+32768/8192 = 4
+4*8192 = 32768
+32768-32768 = 0
+Adresse 32768 ligger i virtual page 4 med en offset på 0
+
+60000/8192 = 7
+7*8192 = 57344
+60000-57344 = 2656
+Adresse 60000 ligger i virtual page 7 med en offset på 2656
+
+7. Tanenbaum oppgave 3.11
+Suppose that a machine has 48-bit virtual addresses and 32-bit physical address.
+(a) If pages are 4K, how many entries are in the page table if it has only a single level? Explain.
+If there is only a single level we need to have all pages in our page table, this should be the entire 48 bit adresse spacce ( 2^48 ) divided by the page size ( 4K, 2^12 ). 
+2^48 / 2^12 = 2^36 ( 64 GB ) 
+(b) TLB with 32 entries. Suppose that a program contains instructions that fit into one page and it sequentially reads long integer elements from an array that spans thousands of pages. How effective will the TLB be for this case?
+
+Litt utifra hvordan man skal tolke spørsmålet så kan dette use caset være veldig effektivt eller totalt ueffektivt. Hvis vi tenker at TLB`en blir spurt hver gang programmet trenger neste integer vil den kun bomme når du når neste page ( Gitt 4 bytes long integers og 4K pages så får vi 1000 ints per page )  og dette betyr at for hver tusende oppslag så bommer vi ( ca 99.9% effektiv ). Men hvis vi tenker at maskinen cacher hele pages før TLB`en og TLB bare blir spurt hver gang den trenger en ny page, så vil TLB´en alltid bomme. 
+
+Lab exercises
+
+1. Lag et script myprocinfo.bash som gir brukeren følgende meny med tilhørende funksjonalitet:
+1 - Hvem er jeg og hva er navnet på dette scriptet?
+2 - Hvor lenge er det siden siste boot?
+3 - Hvor mange prosesser og tråder finnes?
+4 - Hvor mange context switch'er fant sted siste sekund?
+5 - Hvor stor andel av CPU-tiden ble benyttet i kernelmode
+     og i usermode siste sekund?
+6 - Hvor mange interrupts fant sted siste sekund?
+9 - Avslutt dette scriptet
+
+Velg en funksjon:
+
