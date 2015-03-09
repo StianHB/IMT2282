@@ -22,11 +22,13 @@ echo $(echo "scale=2;($user*100/$totalCPU)" | bc) \% av cputiden brukes i usermo
 }
 
 function interrupts {
-interrupt1=$(cat /proc/stat | grep intr | awk '{print $2}')
+interrupt1=$(cat /proc/stat | grep intr | sed -e 's/intr //g' -e 's/ /+/g' | bc)
 sleep 1;
-interrupt2=$(cat /proc/stat | grep intr | awk '{print $2}')
+interrupt2=$(cat /proc/stat | grep intr | sed -e 's/intr //g' -e 's/ /+/g' | bc)
 echo Antall interrupts siste sekund: $(($interrupt2-$interrupt1))
 }
+
+function menu {
 echo "
 1 - Hvem er jeg og hva er navnet på dette scriptet?
 2 - Hvor lenge er det siden siste boot?
@@ -40,16 +42,18 @@ echo "
 
 echo -n "Velg en funksjon: "
 read cmd
+}
 
+menu
 case $cmd in
 	1) echo "Du er $(whoami) og du kjører $0";;
-	2) echo "Uptime $(uptime | awk '{print $3, $4, $5, $6}' | sed 's/,//g')";;	
+	2) echo "Uptime $(uptime | awk '{print $3, $4, $5, $6}' | sed 's/,//g')";;
 	3) echo "Antall prosseser og tråder: $(ps aux | wc -l)";;
 	4) context;;
 	5) cpuTime;;
 	6) interrupts;;
 	9) echo "Bye bye..."; exit 0;;
-*) echo "Error!"; exit 1;;
+	*) menu;;
 esac
 
  
