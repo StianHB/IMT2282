@@ -104,4 +104,24 @@ Working set er definert som mengden minne en prosess krever i ett gitt tidsinter
 3. Hva er hensikten med et swapområde?
 Et swapområde brukes til å flytte pages mellom RAM og disk.
 
-4. A computer has 4 page frames. The time of loading, time of last access and the R and M bits for each page are ( the times are in clock ticks):
+4. A computer has 4 page frames. The time of loading, time of last access and the R(efernced) and M(odified) bits for each page are ( the times are in clock ticks):
+
+| Page | Loaded | Last ref | R | M |
+| 0    | 126    | 280      | 1 | 0 |
+| 1    | 230    | 265      | 0 | 1 |
+| 2    | 140    | 270      | 0 | 0 |
+| 3    | 110    | 285      | 1 | 1 |
+
+Which page will NRU replace?
+
+NRU vil swappe page nr 2 til harddisk og plassere den nye pagen i den plassen. Dette er fordi page 2 ikke har blitt referert til siden sist klokke interrupt og den har heller ikke blitt modifisert. Dette plasserer page nr 2 i den laveste klassen etter NRU sin rangering.
+
+Which page will FIFO replace?
+
+FIFO er relativt rett fram og tar bare den første som kom inn, page 3 i dette tilfellet, og swapper den til disk.
+
+Which page will LRU replace?
+
+LRU swapper ut den page som det er lengst siden har blitt brukt ( referert til ) og i denne sammenhengen blir det page 1. 
+
+Which page will second chance replace?
