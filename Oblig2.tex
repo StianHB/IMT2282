@@ -88,3 +88,20 @@ Lab exercises
 
 Velg en funksjon:
 
+Løsningen ligger her : https://github.com/StianHB/IMT2282/blob/master/myprocinfo.bash
+
+
+Chapter 8
+
+Theory questions
+
+1. Hva menes med page replacement? Beskriv hva som skjer ved denne aktiviteten.
+Page replacement forekommer når vi trenger en page som ikke er i det fysiske minnet og det ikke er plass til pagen i det fysiske minnet. Man må da finne en page man kan fjerne ( skrive ut til disk ), skrive den til disk og så legge inn den pagen vi trenger i minnet. For å få til dette trengs det en metode for å finne den pagen man kan fjerne. Det finnes en teoretisk perfekt måte å gjøre dette på, men i praksis har man funnet gode løsninger som ligger opp mot den teoretiske løsningen.
+
+2. Hva menes med working set og thrashing i forbindelse med minnehåndtering?
+Working set er definert som mengden minne en prosess krever i ett gitt tidsintervall. ( http://en.wikipedia.org/w/index.php?title=Working_set&oldid=631454291 ) Tanenbaum definerer dette som "currently using", dvs at ett working set er mengden minne en prosses trenger akkurat nå. Thrashing er når en maskin/prossess ender opp med å måtte ut på disk for å hente pages så ofte at det går så mye ut over ytelsen til maskinen at den blir ubrukelig.
+
+3. Hva er hensikten med et swapområde?
+Et swapområde brukes til å flytte pages mellom RAM og disk.
+
+4. A computer has 4 page frames. The time of loading, time of last access and the R and M bits for each page are ( the times are in clock ticks):
