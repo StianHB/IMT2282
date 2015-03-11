@@ -125,3 +125,9 @@ Which page will LRU replace?
 LRU swapper ut den page som det er lengst siden har blitt brukt ( referert til ) og i denne sammenhengen blir det page 1. 
 
 Which page will second chance replace?
+
+Second chance er en modifikasjon av FIFO som lar mye brukte pages bli værende i minnet. I denne sammenhengen blir først page 3 sjekket, men R-bitet er satt. Den blir dermed lagt bakerst inn i køen. Page 0 blir sjekket, men her er også R-bittet satt. Den havner bak page 3 i køen og vi går til page 2. Denne blir swappet til disk og vi får plass til den inommende pagen.
+
+Lab exercises
+
+
