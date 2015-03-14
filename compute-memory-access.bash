@@ -12,7 +12,7 @@ softMiss=$(echo "1-$hardMiss-$hits" | bc)
 hitTime=$(($TLB+$RAM))
 # A softmiss takes: TLB lookup -> PT lookup in RAM -> Get page in RAM
 softMissTime=$(($TLB+$RAM+$RAM))
-# A hardmiss takes: TLB lookup -> PT lookup | Interupt -> Disk access | TLB -> Lookup -> PT lookup -> Get page in RAM
+# A hardmiss takes: TLB lookup -> PT lookup | Interupt -> Disk access | TLB Lookup -> PT lookup -> Get page in RAM
 hardMissTime=$(($TLB+$RAM+$DISK+$softMissTime))
 
 # To get average time for a random access we need to add the times w/ weight, then divide by 1(size of our dataset)
