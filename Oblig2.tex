@@ -218,3 +218,19 @@ Bruk grep til å finne i /usr/share/dict/words (eller en tilsvarende ordliste du
 3.Regulære uttrykk anvendt på filsystemet.
 Skriv et script fnamecheck.bash som tar en directory som argument og skriver ut alle filnavn (inkl alle subdirectories) som inneholder norske tegn og/eller mellomrom i filnavnet.
 
+Løsningen ligger her : https://github.com/StianHB/IMT2282/blob/master/fnamecheck.bash
+
+Chapter 10
+
+Theory questions 
+
+1. Hvor store diskblokkadresser har vi i windows filsystemet NTFS?
+I NTFS brukes 64-bit store adresser. Dette gjør at det i teorien kan støtte 2^64 store partisjoner.
+
+2.Hva forståes med MFT i NTFS filsystemet?
+Master File Table ( MFT ) er datastrukturen som brukes i NTFS for å beskrive filer eller mapper. MFT'ene er organisert som en rekke med 1KB blokker med informasjon, hver MFT beskriver attributene til filen/mappen, som feks navn, timestamps og disk adressen til blokken med data er.
+
+3. Tanenbaum oppgave 4.4
+Is the open system call in UNIX absolutely essential? What would the consequences be of not having it?
+
+Nei, open funksjonen er ikke strengt nødvendig, men den er en del av det vakre grensesnittet operativsystemet leverer som glatter over en del av de stygge tingene man må takle for å bruke maskinvaren. Det ville blitt utrolig tungvindt om alle skulle ha implementert sin egen versjon av dette og det ville blitt problematisk i forhold til kernel/usermode.
