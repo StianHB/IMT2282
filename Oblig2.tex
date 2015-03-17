@@ -172,6 +172,8 @@ How many disk operations are needed to fetch the i-node for the file /usr/ast/co
 9. Henter ut blokken til os/ og leser av i-nodeadressen til handout.t
 10.Henter ut i-noden til handout.t
 
+10 diskeroperasjoner for å hente ut i-noden til handout.t 
+
 6.Et prinsipp som nyttes i forbindelse med free-space management i filsystemer er basert på bitmap prinsippet. Forklar kort hvordan dette fungerer. Anta videre et 32-bits system og en bitmap som vist under. 
 Finn nummeret på første ledige diskblokk når følgende bitmap er gitt.
 
@@ -184,3 +186,37 @@ Finn nummeret på første ledige diskblokk når følgende bitmap er gitt.
 0011 1111 1111 1111 1110 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
+
+En disk er delt opp i diskblokker ( varierer i størrelse, men gjerne 512KB,1024KB,2048KB eller 4096 KB) og hver av diskblokkene er representert av en bit i bitmappet. Når disken er helt tom er alle plassene i bitmappet satt til 1 ettersom dette indikerer at blokken er tom. Når en blokk blir tatt i bruk, settes den til 0 i bitmappet. I bitmappet som er gitt i oppgaven er det 5 linjer á 32 bits ( 5*32 = 160 ) med opptatte blokker og 2 bits på linje 6 før vi finner den første ledige på det 163 bit'et.
+
+Lab exercises
+
+1.Informasjon om deler av filsystemet.
+Skriv et script fsinfo.bash som tar en directory som argument og skriver ut 
+• Hvor stor del av partisjonen directorien befinner seg på som er full
+• Hvor mange filer finnes i directorien (inkl subdirectorier), gjennomsnittlig filstørrelse, og full path til den største filen
+• Hvilken fil (IKKE ta med directories) har flest hardlinker til seg selv 
+Eksempel kjøring:
+$ bash fsinfo.bash /opsys/
+Partisjonen /opsys/ befinner seg på er 91% full
+Det finnes 1137 filer.
+Den største er /opsys/00-X/Jan2007.doc som er 14110208 (14M) stor.
+Gjennomsnittlig filstørrelse er ca 186208 bytes.
+Filen /opsys/06-filesystems/lab/c har flest hardlinks, den har 3.
+$
+
+Løsningen ligger her : https://github.com/StianHB/IMT2282/blob/master/fsinfo.bash
+
+2.Regulære uttrykk med grep.
+Bruk grep til å finne i /usr/share/dict/words (eller en tilsvarende ordliste du har tilgjengelig) alle ord som:
+• starter med en q : cat /usr/share/dict/words | egrep ^q
+• slutter med en q : cat /usr/share/dict/words | egrep q$
+• inneholder minst to q’er : cat /usr/share/dict/words | egrep .*q.*q
+• inneholder minst to o’er og starter ikke med w eller a : cat /usr/share/dict/words |  
+• er 7 eller 8 tegn lange : cat /usr/share/dict/words | egrep ^.{7,8}$
+
+
+
+3.Regulære uttrykk anvendt på filsystemet.
+Skriv et script fnamecheck.bash som tar en directory som argument og skriver ut alle filnavn (inkl alle subdirectories) som inneholder norske tegn og/eller mellomrom i filnavnet.
+
