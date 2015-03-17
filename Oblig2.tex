@@ -130,4 +130,57 @@ Second chance er en modifikasjon av FIFO som lar mye brukte pages bli værende i
 
 Lab exercises
 
+8.6.1 : https://github.com/StianHB/IMT2282/blob/master/human-readable-bytes.sh
+8.6.2 : https://github.com/StianHB/IMT2282/blob/master/human-readable-ns.sh
+8.6.3 : https://github.com/StianHB/IMT2282/blob/master/compute-memory-access.bash
+8.6.4 : https://github.com/StianHB/IMT2282/blob/master/procmi.bash
 
+Chapter 9
+
+Theory questions
+
+1. Nevn minst tre eksempler på filattributter/filmetadata.
+Størrelse(nåverende og maksimum), rettigheter ( r,w,x ), eier (bruker/gruppe), tidspunkter (modifisert,aksessert,forandret metadata)
+
+2. Hva menes med ekstern og intern fragmentering i forbindelse med en fil?
+Intern fragmentering i filer er når en fil har fått allokert en eller flere blokker i blokkenheten, men ikke fyller de opp. Ekstern fragmentering så tenker vi på tomrom som oppstår på blokkenheten når feks en fil som ligger mellom 2 andre filer blir slettet. 
+
+3. Tanenbaum oppgave 4.11
+One way to use contiguous allocation of the disk and not to suffer from holes is to compact the disk every time a file is removed. Since all files are contiguous, copying a file requires a seek and rotational delay to read the file, followed by the transfer at full speed. Writing the file back requires the same work. Assuming a seek time of 5 msec, a rotational delay of 4 msec, a transfer rate of 8 MB/sec, and an average file size of 8 KB, how long does it take to read a file into main memory and then write it back to the disk at a new location? Using these numbers, how long would it take to compact half of a 16-GB disk?
+
+Det tar 10 ms å lese en fil på 8 KB til RAM( Seektime 5 ms + Rotational delay 4ms + transfer speed 1 ms(8000KB/s = 8KB/ms))
+Og det tar like lang tid å skrive en fil til en bestemt lokasjon, derfor tar det 20 ms for å lese og skrive en 8 KB fil fra og til disk.
+Halvparten av en 16 GB disk er 8 GB eller 8 000 000 KB. Når det da tar 20 ms for 8 KB så vil det ta 1 000 000 * 20 ms for 8 000 000 KB.
+20 000 000 ms er 20 000 sekunder, eller ca 5 og en halv time
+
+4. Tanenbaum oppgave 4.12
+In light of the answer to the previous question, does compacting the disk ever make sense?
+
+I ekstreme tilfeller, som feks en database server som ikke skal skrives til lengre vil det kanskje være en idé å legge alle filene etterhverandre, men ved hverdagslig bruk av diskplass vil det nok aldri lønne seg.
+
+5. Tanenbaum oppgave 4.40
+How many disk operations are needed to fetch the i-node for the file /usr/ast/courses/os/handout.t? Assume that the i-node for the root directory is in memory, but nothing else along the path is in memory. Also assume that all directories fit in one disk block.
+
+1. Henter ut diskblokken til / og leser av i-noden til usr/
+2. Henter ut i-noden til usr/ og leser av blokkadressen til usr/
+3. Henter ut blokken til usr/ og leser av i-nodeadressen til ast/
+4. Henter ut i-noden til  ast/ og leser av blokkadressen til ast/
+5. Henter ut blokken til ast/ og leser av i-nodearessen til courses/
+6. Henter ut i-noden til courses/ og leser av blokkadressen til courses/
+7. Henter ut blokken til courses/ og leser av i-nodeadressen til os/
+8. Henter ut i-noden til os/ og leser av blokkadressen til os/
+9. Henter ut blokken til os/ og leser av i-nodeadressen til handout.t
+10.Henter ut i-noden til handout.t
+
+6.Et prinsipp som nyttes i forbindelse med free-space management i filsystemer er basert på bitmap prinsippet. Forklar kort hvordan dette fungerer. Anta videre et 32-bits system og en bitmap som vist under. 
+Finn nummeret på første ledige diskblokk når følgende bitmap er gitt.
+
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0011 1111 1111 1111 1110 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
