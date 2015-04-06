@@ -77,6 +77,7 @@ Litt utifra hvordan man skal tolke spørsmålet så kan dette use caset være ve
 Lab exercises
 
 1. Lag et script myprocinfo.bash som gir brukeren følgende meny med tilhørende funksjonalitet:
+
 1 - Hvem er jeg og hva er navnet på dette scriptet?
 2 - Hvor lenge er det siden siste boot?
 3 - Hvor mange prosesser og tråder finnes?
@@ -90,6 +91,9 @@ Velg en funksjon:
 
 Løsningen ligger her : https://github.com/StianHB/IMT2282/blob/master/myprocinfo.bash
 
+2. Skriv om myprocinfo.bash til å bruke whiptail til å vise meny.
+
+Løsningen ligger her: https://github.com/StianHB/IMT2282/blob/master/whiptailprocinfo.bash
 
 Chapter 8
 
@@ -97,12 +101,13 @@ Theory questions
 
 1. Hva menes med page replacement? Beskriv hva som skjer ved denne aktiviteten.
 Page replacement forekommer når vi trenger en page som ikke er i det fysiske minnet og det ikke er plass til pagen i det fysiske minnet. Man må da finne en page man kan fjerne ( skrive ut til disk ), skrive den til disk og så legge inn den pagen vi trenger i minnet. For å få til dette trengs det en metode for å finne den pagen man kan fjerne. Det finnes en teoretisk perfekt måte å gjøre dette på, men i praksis har man funnet gode løsninger som ligger opp mot den teoretiske løsningen.
+Blant annet har vi "Not recently used" og "FIFO". NRU deler opp pages i 4 klasser, som baserer seg på når en page var sist modifisert eller lest. FIFO er en veldig enkel variant, den første pagen som kom inn er den første som blir swappet til disk. 
 
 2. Hva menes med working set og thrashing i forbindelse med minnehåndtering?
 Working set er definert som mengden minne en prosess krever i ett gitt tidsintervall. ( http://en.wikipedia.org/w/index.php?title=Working_set&oldid=631454291 ) Tanenbaum definerer dette som "currently using", dvs at ett working set er mengden minne en prosses trenger akkurat nå. Thrashing er når en maskin/prossess ender opp med å måtte ut på disk for å hente pages så ofte at det går så mye ut over ytelsen til maskinen at den blir ubrukelig.
 
 3. Hva er hensikten med et swapområde?
-Et swapområde brukes til å flytte pages mellom RAM og disk.
+Et swapområde brukes til å flytte pages mellom RAM og disk. Hensikten med dette er å ha pages ligge sammenhengende på disk istedet for at den er spred utover ( Fragmentert ) ettersom pagefilen er preallokert på disk i en sammenhengende mengde med blokker.(Windows). I Linux bruker vi gjerne hele partisjoner til swapping, men det oppnår den samme effekten. Dette sparer noe tid hvis alternativet hadde vært mer eller mindre tilfeldig valgt lagring av pages på disk.
 
 4. A computer has 4 page frames. The time of loading, time of last access and the R(efernced) and M(odified) bits for each page are ( the times are in clock ticks):
 
@@ -148,10 +153,12 @@ Intern fragmentering i filer er når en fil har fått allokert en eller flere bl
 3. Tanenbaum oppgave 4.11
 One way to use contiguous allocation of the disk and not to suffer from holes is to compact the disk every time a file is removed. Since all files are contiguous, copying a file requires a seek and rotational delay to read the file, followed by the transfer at full speed. Writing the file back requires the same work. Assuming a seek time of 5 msec, a rotational delay of 4 msec, a transfer rate of 8 MB/sec, and an average file size of 8 KB, how long does it take to read a file into main memory and then write it back to the disk at a new location? Using these numbers, how long would it take to compact half of a 16-GB disk?
 
-Det tar 10 ms å lese en fil på 8 KB til RAM( Seektime 5 ms + Rotational delay 4ms + transfer speed 1 ms(8000KB/s = 8KB/ms))
+
+8MB/s er 8192 KB/s. I 1 sekund er det 1000 ms, dvs at i løpet av 1 ms så kan det leses 8192 bytes(8 KB) fra disken.
+Det betyr at det tar 10 ms å lese en fil på 8KB til ram. ( Seektime på 5 ms + Rotational delay på 4ms + transfer speed på 8KB/ms ) 
 Og det tar like lang tid å skrive en fil til en bestemt lokasjon, derfor tar det 20 ms for å lese og skrive en 8 KB fil fra og til disk.
-Halvparten av en 16 GB disk er 8 GB eller 8 000 000 KB. Når det da tar 20 ms for 8 KB så vil det ta 1 000 000 * 20 ms for 8 000 000 KB.
-20 000 000 ms er 20 000 sekunder, eller ca 5 og en halv time
+Halvparten av en 16 GB disk er 8 GB eller 8 388 608 KB. Når det da tar 20 ms for 8 KB så vil det ta 1 048 576 * 20 ms for 8 388 608 KB.
+20 971 520 ms er ca 20 972 sekunder, eller ca 5 timer og 49 minutter.
 
 4. Tanenbaum oppgave 4.12
 In light of the answer to the previous question, does compacting the disk ever make sense?
@@ -187,7 +194,7 @@ Finn nummeret på første ledige diskblokk når følgende bitmap er gitt.
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 
-En disk er delt opp i diskblokker ( varierer i størrelse, men gjerne 512KB,1024KB,2048KB eller 4096 KB) og hver av diskblokkene er representert av en bit i bitmappet. Når disken er helt tom er alle plassene i bitmappet satt til 1 ettersom dette indikerer at blokken er tom. Når en blokk blir tatt i bruk, settes den til 0 i bitmappet. I bitmappet som er gitt i oppgaven er det 5 linjer á 32 bits ( 5*32 = 160 ) med opptatte blokker og 2 bits på linje 6 før vi finner den første ledige på det 163 bit'et.
+En disk er delt opp i diskblokker ( varierer i størrelse, men gjerne 512KB,1024KB,2048KB eller 4096 KB) og hver av diskblokkene er representert av en bit i bitmappet. Når disken er helt tom er alle plassene i bitmappet satt til 1 ettersom dette indikerer at blokken er tom. Når en blokk blir tatt i bruk, settes den til 0 i bitmappet. I bitmappet som er gitt i oppgaven er det 6 linjer á 32 bits ( 6*32 = 192 bits ) med opptatte blokker og 2 bits på linje 6 før vi finner den første ledige på det 195 bit'et.
 
 Lab exercises
 
@@ -233,4 +240,4 @@ Master File Table ( MFT ) er datastrukturen som brukes i NTFS for å beskrive fi
 3. Tanenbaum oppgave 4.4
 Is the open system call in UNIX absolutely essential? What would the consequences be of not having it?
 
-Nei, open funksjonen er ikke strengt nødvendig, men den er en del av det vakre grensesnittet operativsystemet leverer som glatter over en del av de stygge tingene man må takle for å bruke maskinvaren. Det ville blitt utrolig tungvindt om alle skulle ha implementert sin egen versjon av dette og det ville blitt problematisk i forhold til kernel/usermode.
+Nei, open funksjonen er ikke strengt nødvendig, men den er en del av det vakre grensesnittet operativsystemet leverer som glatter over en del av de stygge tingene man må takle for å bruke maskinvaren. Det ville blitt utrolig tungvindt om alle skulle ha implementert sin egen versjon av dette og det ville blitt problematisk i forhold til kernel/usermode. Evt om man skulle kun brukt systemkallet read hadde man måtte spesifisere filnavn hver gang og i tilegg selv kontrollert hvor man var i filen når man leser eller skriver til den.
