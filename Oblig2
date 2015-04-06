@@ -1,60 +1,40 @@
-\documentclass[11pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{hyperref}
-\usepackage[norsk]{babel}
-\DeclareUnicodeCharacter{00A0}{ }
-\setcounter{section}{6}
+Chapter 7
 
-\title{IMT2282 - Operativsystemer \\
-	Oblig 2}
-\author{Stian Hoel Bergseth \\
-	130378}
+Theory Questions
 
-\date{\today}
-
-
-\begin{document}
-\maketitle
-
-\section{Chapter 7}
-\subsection{Theory Questions}
-
-\subsubsection{1. Hva brukes en bitmap til i forbindelse med minnehåndtering i et page-basert minne?}
+1. Hva brukes en bitmap til i forbindelse med minnehåndtering i et page-basert minne?
 
 Bitmap benyttes for å holde rede på ledig plass, gjerne i RAM eller på disk. Ettersom bitmap ikke trenger så stor plass for å adressere store minnemengder er det relativt effektivt.
 
-\subsubsection{2. Hvilke felter finnes i en Pagetable Entry ?}
+2. Hvilke felter finnes i en Pagetable Entry ?
 
 En pagetable entry er delt opp i flere felt, present/absent bit, modified bit, referenced bit, caching disabled bit, den inneholder også pekeren mellom det virtuelle minnet og det fysiske minnet. Muligens også adresse rom eller PID til eier.
-Se \url{http://en.wikipedia.org/w/index.php?title=Page_table&oldid=641651423#Page_table_data}
+Se http://en.wikipedia.org/w/index.php?title=Page_table&oldid=641651423#Page_table_data
 
-\subsubsection{3.  Hvilke prinsipper kan vi benytte for å redusere størrelsen på en pagetable i internminnet}
+3.  Hvilke prinsipper kan vi benytte for å redusere størrelsen på en pagetable i internminnet?
 
 Vi har to prinsipper for å redusere størrelsen på en pagetabel, for det første kan vi dele den opp i flere lag - "Multilevel page table" - noe som gir oss mulighet till å kun holde på pages til de pagene som er i bruk nå og kan også la oss skalere opp tabellene ved behov. Ett annet prinsipp er "Inverted page table", hvor man har page frames adressert i stedet for en entry i en page fram adressert. Dette fører til økt kompleksitet for å gå fra virtuellet til fysisk minne. For å løse det har man en TLB for å huske de mest brukte.
 
-\subsubsection{ 4. Affinity scheduling (“CPU pinning”) reduserer antall cache misser. Reduseres også antall TLB misser? Reduseres også antall page faults? Begrunn svaret.}
+ 4. Affinity scheduling (“CPU pinning”) reduserer antall cache misser. Reduseres også antall TLB misser? Reduseres også antall page faults? Begrunn svaret.
 
 Antall TLB misses reduseres ikke av CPU pinning ettersom det kun er en TLB i maskinen. Dette gjør også at page faults ikke blir redusert.
  
-\url{http://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf}
+http://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf
 
-\subsubsection{5. Hvor stor blir en bitmap i et page-inndelt minnesystem med pagestørrelse 4KB og internminne på 512MB?}
+5. Hvor stor blir en bitmap i et page-inndelt minnesystem med pagestørrelse 4KB og internminne på 512MB?
 
-512MB = 2\string^28 
-4KB   = 2\string^12 
+512MB = 2^28 
+4KB   = 2^12 
 
-Antall 4KB pages i 512MB minne = 2\string^28 / 2\string^12 = 65 536
-1 page krever 1 bit = 65 536 bits = 2\string^16 
+Antall 4KB pages i 512MB minne = 2^28 / 2^12 = 65 536
+1 page krever 1 bit = 65 536 bits = 2^16 
 
-Bitmappet blir 2\string^16 stort, eller 65 536 bytes som er 64KB.
+Bitmappet blir 2^16 stort, eller 65 536 bytes som er 64KB.
 
-\subsubsection{6. Tanenbaum oppgave 3.5}
-For each of the following decimal virtual addresses, compute the virtual page number and offset for a 4K page and for an 8K page: 20000, 32768, 60000. \\ 
-\begin{verbatim}
-Virtual Page number ved 4K pages starter på page 0 mellom 0 - 4095 og er 0 + N for 
-hver multiple av 4096 oppover. Vi kan dermed finne VPN for den desimale 
-representasjonen av den virtuelle adressen ved å bruke heltalls deling på 4096. 
+6. Tanenbaum oppgave 3.5
+For each of the following decimal virtual addresses, compute the virtual page number and offset for a 4K page and for an 8K page: 20000, 32768, 60000. 
 
+Virtual Page number ved 4K pages starter på page 0 mellom 0 - 4095 og er 0 + N for hver multiple av 4096 oppover. Vi kan dermed finne VPN for den desimale representasjonen av den virtuelle adressen ved å bruke heltalls deling på 4096. 
 20000/4096 = 4
 4*4096 = 16384 
 20000 - 16384 = 3616
@@ -84,21 +64,20 @@ Adresse 32768 ligger i virtual page 4 med en offset på 0
 7*8192 = 57344
 60000-57344 = 2656
 Adresse 60000 ligger i virtual page 7 med en offset på 2656
-\end{verbatim}
 
-\subsubsection{7. Tanenbaum oppgave 3.11}
+7. Tanenbaum oppgave 3.11
 Suppose that a machine has 48-bit virtual addresses and 32-bit physical address.
 (a) If pages are 4K, how many entries are in the page table if it has only a single level? Explain.
-If there is only a single level we need to have all pages in our page table, this should be the entire 48 bit adresse spacce ( 2\string^48 ) divided by the page size ( 4K, 2\string^12 ). 
-2\string^48 / 2\string^12 = 2\string^36 ( 64 GB ) 
+If there is only a single level we need to have all pages in our page table, this should be the entire 48 bit adresse spacce ( 2^48 ) divided by the page size ( 4K, 2^12 ). 
+2^48 / 2^12 = 2^36 ( 64 GB ) 
 (b) TLB with 32 entries. Suppose that a program contains instructions that fit into one page and it sequentially reads long integer elements from an array that spans thousands of pages. How effective will the TLB be for this case?
 
 Litt utifra hvordan man skal tolke spørsmålet så kan dette use caset være veldig effektivt eller totalt ueffektivt. Hvis vi tenker at TLB`en blir spurt hver gang programmet trenger neste integer vil den kun bomme når du når neste page ( Gitt 4 bytes long integers og 4K pages så får vi 1000 ints per page )  og dette betyr at for hver tusende oppslag så bommer vi ( ca 99.9% effektiv ). Men hvis vi tenker at maskinen cacher hele pages før TLB`en og TLB bare blir spurt hver gang den trenger en ny page, så vil TLB´en alltid bomme. 
 
-\subsection{Lab exercise}
+Lab exercises
 
-\subsubsection{1. Lag et script myprocinfo.bash som gir brukeren følgende meny med tilhørende funksjonalitet:}
-\begin{verbatim}
+1. Lag et script myprocinfo.bash som gir brukeren følgende meny med tilhørende funksjonalitet:
+
 1 - Hvem er jeg og hva er navnet på dette scriptet?
 2 - Hvor lenge er det siden siste boot?
 3 - Hvor mange prosesser og tråder finnes?
@@ -109,81 +88,69 @@ Litt utifra hvordan man skal tolke spørsmålet så kan dette use caset være ve
 9 - Avslutt dette scriptet
 
 Velg en funksjon:
-\end{verbatim}
 
-Løsningen ligger her :\\
- \url{https://github.com/StianHB/IMT2282/blob/master/myprocinfo.bash}
+Løsningen ligger her : https://github.com/StianHB/IMT2282/blob/master/myprocinfo.bash
 
 2. Skriv om myprocinfo.bash til å bruke whiptail til å vise meny.
 
-Løsningen ligger her:\\
- \url{https://github.com/StianHB/IMT2282/blob/master/whiptailprocinfo.bash}
+Løsningen ligger her: https://github.com/StianHB/IMT2282/blob/master/whiptailprocinfo.bash
 
-\section{Chapter 8}
+Chapter 8
 
-\subsection{Theory questions}
+Theory questions
 
-\subsubsection{1. Hva menes med page replacement? Beskriv hva som skjer ved denne aktiviteten.}
-
+1. Hva menes med page replacement? Beskriv hva som skjer ved denne aktiviteten.
 Page replacement forekommer når vi trenger en page som ikke er i det fysiske minnet og det ikke er plass til pagen i det fysiske minnet. Man må da finne en page man kan fjerne ( skrive ut til disk ), skrive den til disk og så legge inn den pagen vi trenger i minnet. For å få til dette trengs det en metode for å finne den pagen man kan fjerne. Det finnes en teoretisk perfekt måte å gjøre dette på, men i praksis har man funnet gode løsninger som ligger opp mot den teoretiske løsningen.
-Blant annet har vi not recently used og FIFO. NRU deler opp pages i 4 klasser, som baserer seg på når en page var sist modifisert eller lest. FIFO er en veldig enkel variant, den første pagen som kom inn er den første som blir swappet til disk. 
+Blant annet har vi "Not recently used" og "FIFO". NRU deler opp pages i 4 klasser, som baserer seg på når en page var sist modifisert eller lest. FIFO er en veldig enkel variant, den første pagen som kom inn er den første som blir swappet til disk. 
 
-\subsubsection{2. Hva menes med working set og thrashing i forbindelse med minnehåndtering?}
+2. Hva menes med working set og thrashing i forbindelse med minnehåndtering?
+Working set er definert som mengden minne en prosess krever i ett gitt tidsintervall. ( http://en.wikipedia.org/w/index.php?title=Working_set&oldid=631454291 ) Tanenbaum definerer dette som "currently using", dvs at ett working set er mengden minne en prosses trenger akkurat nå. Thrashing er når en maskin/prossess ender opp med å måtte ut på disk for å hente pages så ofte at det går så mye ut over ytelsen til maskinen at den blir ubrukelig.
 
-Working set er definert som mengden minne en prosess krever i ett gitt tidsintervall. ( \url{http://en.wikipedia.org/w/index.php?title=Working_set&oldid=631454291} ) Tanenbaum definerer dette som "currently using", dvs at ett working set er mengden minne en prosses trenger akkurat nå. Thrashing er når en maskin/prossess ender opp med å måtte ut på disk for å hente pages så ofte at det går så mye ut over ytelsen til maskinen at den blir ubrukelig.
-
-\subsubsection{3. Hva er hensikten med et swapområde?}
-
+3. Hva er hensikten med et swapområde?
 Et swapområde brukes til å flytte pages mellom RAM og disk. Hensikten med dette er å ha pages ligge sammenhengende på disk istedet for at den er spred utover ( Fragmentert ) ettersom pagefilen er preallokert på disk i en sammenhengende mengde med blokker.(Windows). I Linux bruker vi gjerne hele partisjoner til swapping, men det oppnår den samme effekten. Dette sparer noe tid hvis alternativet hadde vært mer eller mindre tilfeldig valgt lagring av pages på disk.
 
-\subsubsection{4. A computer has 4 page frames. The time of loading, time of last access and the R(efernced) and M(odified) bits for each page are ( the times are in clock ticks)}
-\begin{tabular}{|c | c | c | c | c |}
-\hline
- Page & Loaded & Last ref & R & M  \\
-\hline
- 0    & 126    & 280      & 1 & 0  \\
- 1    & 230    & 265      & 0 & 1  \\
- 2    & 140    & 270      & 0 & 0  \\
- 3    & 110    & 285      & 1 & 1  \\
-\hline
-\end{tabular}
-\\
-\textbf{Which page will NRU replace?}
-\\
+4. A computer has 4 page frames. The time of loading, time of last access and the R(efernced) and M(odified) bits for each page are ( the times are in clock ticks):
+
+| Page | Loaded | Last ref | R | M |
+| 0    | 126    | 280      | 1 | 0 |
+| 1    | 230    | 265      | 0 | 1 |
+| 2    | 140    | 270      | 0 | 0 |
+| 3    | 110    | 285      | 1 | 1 |
+
+Which page will NRU replace?
+
 NRU vil swappe page nr 2 til harddisk og plassere den nye pagen i den plassen. Dette er fordi page 2 ikke har blitt referert til siden sist klokke interrupt og den har heller ikke blitt modifisert. Dette plasserer page nr 2 i den laveste klassen etter NRU sin rangering.
-\\
-\textbf{Which page will FIFO replace?}
-\\
+
+Which page will FIFO replace?
+
 FIFO er relativt rett fram og tar bare den første som kom inn, page 3 i dette tilfellet, og swapper den til disk.
-\\
-\textbf{Which page will LRU replace?}
-\\
+
+Which page will LRU replace?
+
 LRU swapper ut den page som det er lengst siden har blitt brukt ( referert til ) og i denne sammenhengen blir det page 1. 
-\\
-\textbf{Which page will second chance replace?}
-\\
+
+Which page will second chance replace?
+
 Second chance er en modifikasjon av FIFO som lar mye brukte pages bli værende i minnet. I denne sammenhengen blir først page 3 sjekket, men R-bitet er satt. Den blir dermed lagt bakerst inn i køen. Page 0 blir sjekket, men her er også R-bittet satt. Den havner bak page 3 i køen og vi går til page 2. Denne blir swappet til disk og vi får plass til den inommende pagen.
 
-\subsection{Lab exercises}
+Lab exercises
 
-\subsubsection{Byte konvertering}  \url{https://github.com/StianHB/IMT2282/blob/master/human-readable-bytes.sh}
-\subsubsection{Nano sekund konvertering}  \url{https://github.com/StianHB/IMT2282/blob/master/human-readable-ns.sh}
-\subsubsection{Effektiv minneaksesstid}  \url{https://github.com/StianHB/IMT2282/blob/master/compute-memory-access.bash}
-\subsubsection{En prosess sin bruk av virtuelt og fysisk minne}  \url{https://github.com/StianHB/IMT2282/blob/master/procmi.bash}
+8.6.1 : https://github.com/StianHB/IMT2282/blob/master/human-readable-bytes.sh
+8.6.2 : https://github.com/StianHB/IMT2282/blob/master/human-readable-ns.sh
+8.6.3 : https://github.com/StianHB/IMT2282/blob/master/compute-memory-access.bash
+8.6.4 : https://github.com/StianHB/IMT2282/blob/master/procmi.bash
 
-\section{Chapter 9}
+Chapter 9
 
-\subsection{Theory questions}
+Theory questions
 
-\subsubsection{1. Nevn minst tre eksempler på filattributter/filmetadata.}
-
+1. Nevn minst tre eksempler på filattributter/filmetadata.
 Størrelse(nåverende og maksimum), rettigheter ( r,w,x ), eier (bruker/gruppe), tidspunkter (modifisert,aksessert,forandret metadata)
 
-\subsubsection{2. Hva menes med ekstern og intern fragmentering i forbindelse med en fil?}
-
+2. Hva menes med ekstern og intern fragmentering i forbindelse med en fil?
 Intern fragmentering i filer er når en fil har fått allokert en eller flere blokker i blokkenheten, men ikke fyller de opp. Ekstern fragmentering så tenker vi på tomrom som oppstår på blokkenheten når feks en fil som ligger mellom 2 andre filer blir slettet. 
 
-\subsubsection{3. Tanenbaum oppgave 4.11}
+3. Tanenbaum oppgave 4.11
 One way to use contiguous allocation of the disk and not to suffer from holes is to compact the disk every time a file is removed. Since all files are contiguous, copying a file requires a seek and rotational delay to read the file, followed by the transfer at full speed. Writing the file back requires the same work. Assuming a seek time of 5 msec, a rotational delay of 4 msec, a transfer rate of 8 MB/sec, and an average file size of 8 KB, how long does it take to read a file into main memory and then write it back to the disk at a new location? Using these numbers, how long would it take to compact half of a 16-GB disk?
 
 
@@ -193,14 +160,14 @@ Og det tar like lang tid å skrive en fil til en bestemt lokasjon, derfor tar de
 Halvparten av en 16 GB disk er 8 GB eller 8 388 608 KB. Når det da tar 20 ms for 8 KB så vil det ta 1 048 576 * 20 ms for 8 388 608 KB.
 20 971 520 ms er ca 20 972 sekunder, eller ca 5 timer og 49 minutter.
 
-\subsubsection{4. Tanenbaum oppgave 4.12}
+4. Tanenbaum oppgave 4.12
 In light of the answer to the previous question, does compacting the disk ever make sense?
 
 I ekstreme tilfeller, som feks en database server som ikke skal skrives til lengre vil det kanskje være en idé å legge alle filene etterhverandre, men ved hverdagslig bruk av diskplass vil det nok aldri lønne seg.
 
-\subsubsection{5. Tanenbaum oppgave 4.40}
+5. Tanenbaum oppgave 4.40
 How many disk operations are needed to fetch the i-node for the file /usr/ast/courses/os/handout.t? Assume that the i-node for the root directory is in memory, but nothing else along the path is in memory. Also assume that all directories fit in one disk block.
-\begin{verbatim}
+
 1. Henter ut diskblokken til / og leser av i-noden til usr/
 2. Henter ut i-noden til usr/ og leser av blokkadressen til usr/
 3. Henter ut blokken til usr/ og leser av i-nodeadressen til ast/
@@ -213,9 +180,10 @@ How many disk operations are needed to fetch the i-node for the file /usr/ast/co
 10.Henter ut i-noden til handout.t
 
 10 diskeroperasjoner for å hente ut i-noden til handout.t 
-\end{verbatim}
-\subsubsection{6.Et prinsipp som nyttes i forbindelse med free-space management i filsystemer er basert på bitmap prinsippet. Forklar kort hvordan dette fungerer. Anta videre et 32-bits system og en bitmap som vist under. Finn nummeret på første ledige diskblokk når følgende bitmap er gitt.}
-\begin{verbatim}
+
+6.Et prinsipp som nyttes i forbindelse med free-space management i filsystemer er basert på bitmap prinsippet. Forklar kort hvordan dette fungerer. Anta videre et 32-bits system og en bitmap som vist under. 
+Finn nummeret på første ledige diskblokk når følgende bitmap er gitt.
+
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
@@ -225,55 +193,51 @@ How many disk operations are needed to fetch the i-node for the file /usr/ast/co
 0011 1111 1111 1111 1110 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
-\end{verbatim}
+
 En disk er delt opp i diskblokker ( varierer i størrelse, men gjerne 512KB,1024KB,2048KB eller 4096 KB) og hver av diskblokkene er representert av en bit i bitmappet. Når disken er helt tom er alle plassene i bitmappet satt til 1 ettersom dette indikerer at blokken er tom. Når en blokk blir tatt i bruk, settes den til 0 i bitmappet. I bitmappet som er gitt i oppgaven er det 6 linjer á 32 bits ( 6*32 = 192 bits ) med opptatte blokker og 2 bits på linje 6 før vi finner den første ledige på det 195 bit'et.
 
-\subsection{Lab exercises}
+Lab exercises
 
-\subsubsection{1.Informasjon om deler av filsystemet.}
-Skriv et script fsinfo.bash som tar en directory som argument og skriver ut\\ 
-• Hvor stor del av partisjonen directorien befinner seg på som er full\\
-• Hvor mange filer finnes i directorien (inkl subdirectorier), gjennomsnittlig filstørrelse, og full path til den største filen\\
-• Hvilken fil (IKKE ta med directories) har flest hardlinker til seg selv \\
-Eksempel kjøring:\\
-\$ bash fsinfo.bash /opsys/\\
-Partisjonen /opsys/ befinner seg på er 91\% full\\
-Det finnes 1137 filer.\\
-Den største er /opsys/00-X/Jan2007.doc som er 14110208 (14M) stor.\\
-Gjennomsnittlig filstørrelse er ca 186208 bytes.\\
-Filen /opsys/06-filesystems/lab/c har flest hardlinks, den har 3.\\
-\$
+1.Informasjon om deler av filsystemet.
+Skriv et script fsinfo.bash som tar en directory som argument og skriver ut 
+• Hvor stor del av partisjonen directorien befinner seg på som er full
+• Hvor mange filer finnes i directorien (inkl subdirectorier), gjennomsnittlig filstørrelse, og full path til den største filen
+• Hvilken fil (IKKE ta med directories) har flest hardlinker til seg selv 
+Eksempel kjøring:
+$ bash fsinfo.bash /opsys/
+Partisjonen /opsys/ befinner seg på er 91% full
+Det finnes 1137 filer.
+Den største er /opsys/00-X/Jan2007.doc som er 14110208 (14M) stor.
+Gjennomsnittlig filstørrelse er ca 186208 bytes.
+Filen /opsys/06-filesystems/lab/c har flest hardlinks, den har 3.
+$
 
-Løsningen ligger her :\url{https://github.com/StianHB/IMT2282/blob/master/fsinfo.bash}
+Løsningen ligger her : https://github.com/StianHB/IMT2282/blob/master/fsinfo.bash
 
-\subsubsection{2.Regulære uttrykk med grep.}
-Bruk grep til å finne i /usr/share/dict/words (eller en tilsvarende ordliste du har tilgjengelig) alle ord som:\\
-• starter med en q : \textbf{cat /usr/share/dict/words | egrep \string^q} \\
-• slutter med en q : \textbf{cat /usr/share/dict/words | egrep q\$} \\
-• inneholder minst to q’er : \textbf{cat /usr/share/dict/words | egrep .*q.*q} \\
-• inneholder minst to o’er og starter ikke med w eller a :\\ \textbf{cat /usr/share/dict/words | grep -E "(\string^[\string^awo].*o.*o.*|\string^o.*o.*)"} \\
-• er 7 eller 8 tegn lange : \textbf{cat /usr/share/dict/words | egrep \string^.\{7,8\}\$} \\
+2.Regulære uttrykk med grep.
+Bruk grep til å finne i /usr/share/dict/words (eller en tilsvarende ordliste du har tilgjengelig) alle ord som:
+• starter med en q : cat /usr/share/dict/words | egrep ^q
+• slutter med en q : cat /usr/share/dict/words | egrep q$
+• inneholder minst to q’er : cat /usr/share/dict/words | egrep .*q.*q
+• inneholder minst to o’er og starter ikke med w eller a : cat /usr/share/dict/words | grep -E "(^[^awo].*o.*o.*|^o.*o.*)"
+• er 7 eller 8 tegn lange : cat /usr/share/dict/words | egrep ^.{7,8}$
 
-\subsubsection{3.Regulære uttrykk anvendt på filsystemet.}
+3.Regulære uttrykk anvendt på filsystemet.
 Skriv et script fnamecheck.bash som tar en directory som argument og skriver ut alle filnavn (inkl alle subdirectories) som inneholder norske tegn og/eller mellomrom i filnavnet.
 
-Løsningen ligger her : \url{https://github.com/StianHB/IMT2282/blob/master/fnamecheck.bash}
+Løsningen ligger her : https://github.com/StianHB/IMT2282/blob/master/fnamecheck.bash
 
-\section{Chapter 10}
+Chapter 10
 
-\subsection{Theory questions}
+Theory questions 
 
-\subsubsection{1. Hvor store diskblokkadresser har vi i windows filsystemet NTFS?}
+1. Hvor store diskblokkadresser har vi i windows filsystemet NTFS?
+I NTFS brukes 64-bit store adresser. Dette gjør at det i teorien kan støtte 2^64 store partisjoner.
 
-I NTFS brukes 64-bit store adresser. Dette gjør at det i teorien kan støtte 2\string^64 store partisjoner.
-
-\subsubsection{2.Hva forståes med MFT i NTFS filsystemet?}
-
+2.Hva forståes med MFT i NTFS filsystemet?
 Master File Table ( MFT ) er datastrukturen som brukes i NTFS for å beskrive filer eller mapper. MFT'ene er organisert som en rekke med 1KB blokker med informasjon, hver MFT beskriver attributene til filen/mappen, som feks navn, timestamps og disk adressen til blokken med data er.
 
-\subsubsection{3. Tanenbaum oppgave 4.4}
+3. Tanenbaum oppgave 4.4
 Is the open system call in UNIX absolutely essential? What would the consequences be of not having it?
 
 Nei, open funksjonen er ikke strengt nødvendig, men den er en del av det vakre grensesnittet operativsystemet leverer som glatter over en del av de stygge tingene man må takle for å bruke maskinvaren. Det ville blitt utrolig tungvindt om alle skulle ha implementert sin egen versjon av dette og det ville blitt problematisk i forhold til kernel/usermode. Evt om man skulle kun brukt systemkallet read hadde man måtte spesifisere filnavn hver gang og i tilegg selv kontrollert hvor man var i filen når man leser eller skriver til den.
-
-\end{document}
