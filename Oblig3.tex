@@ -1,0 +1,33 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[norsk]{babel}
+\DeclareUnicodeCharacter{00A0}{ }
+\setcounter{section}{10}
+
+\title{IMT2282 - Operativsystemer \\
+	Oblig 2}
+\author{Stian Hoel Bergseth \\
+	130378}
+
+\date{\today}
+
+
+\begin{document}
+\maketitle
+
+\section{Chapter 11}
+\subsection{Theory Questions}
+\setcounter{subsection}{6}
+\subsubsection{1. Hva er forskjellen på memory mapped og isolated I/O? Angi fordeler og ulemper med disse to prinsippene.}
+
+I/O enheter, som f.eks disker, har egne registere for å ta imot og sende fra seg data. Hvis man skal snakke direkte til disse, isolated I/O , krever det at man har egne instruksjoner for å sende/hente data fra disse registrene. Hvis man heller bruker memory mapped I/O så kan man bruke de samme instruksjonene for å snakke med hurtigminnet og I/O enhetene. Dette ville krevd egne funksjoner for å komunisere med I/O enheter og ville skapt ekstra overhead sammenlignet med å bare kunne aksessere enhetene som variabler i hurtigminnet. En annen fordel er at man unngår behovet for egne sikkerhetsmekanismer for I/O enheter. Med memory mapped I/O så holder det at operativsystemet ikke tilegner prosesser minneadressene som er reservert til I/O. En av ulempene ved memory mapped I/O er at både hurtigminne og I/O enhetene må kunne få med seg alle forespørrsler CPUen gjør på adresse bus'en. Her har vi et problem ettersom hurtigminnet er raskt, mens I/O enheter er vesentlig treigere. Dette har man kommet rundt ved å ha en egen dedikert bus mellom CPU og RAM, mens I/O enhetene kan enten lytte på denne bus'en( men da vil ikke I/O enhetene klare å henge med ) eller så kan memory controlleren ha et predefinert sett med adresser som den flytter ut på en I/O bus hvis CPUen ønsker å snakke til en I/O enhet.
+
+Isolated I/O
+
+\subsubsection{2. På en harddisk, hvor mange bytes finnes som regel i en sektor? Hva er en sylinder? Hva er typisk gjennomsnittlig aksesstid for en disk i dag? Hva er overføringsraten (ca, i MB/s) mellom diskplate og buffer?}
+\subsubsection{3. Hva oppnår vi med å koble diskene som RAID disker? Hvordan er diskene organisert på RAID-level 1. Forklar hvordan diskene er organisert på RAID-level 5.}
+\subsubsection{4. Hvilke fire kriterier definerer et presist interrupt?}
+\subsubsection{5. Forklar forskjellen mellom HDD og SSD når det gjelder lesing, skriving/overskriving og sletting av filer. Hva er poenget med TRIM kommandoen?}
+\subsubsection{6. Hva betyr det at et operativsystem er tilpasset SSD disker (slik som f.eks. Windows 7 er).}
+\end{document}
