@@ -19,7 +19,7 @@
 \section{Chapter 11}
 \subsection{Theory Questions}
 \setcounter{subsection}{6}
-\subsubsection{1. Hva er forskjellen på memory mapped og isolated I/O? Angi fordeler og ulemper med disse to prinsippene.}
+\subsubsection{Hva er forskjellen på memory mapped og isolated I/O? Angi fordeler og ulemper med disse to prinsippene.}
 
 Memory mapped IO er når IO enheter ( disker osv ) deler samme adresse bus som RAM. Dette gjør at CPUen kan bruke de samme instruksjonene for å snakke til RAM som til IO enheter, noe som senker kompleksiteten ved bruk av IO. Isolated IO er da det motsatte, hvor IO enheter har en egen adresse bus og krever ett eget sett med instruksjoner når CPUen ønsker å sende data til IO enheter. Ulempen med Memory mapped IO er at alle enheter som er koblet på det samme bus interfacet må følge samme klokkefrekvens, dette gjør at IO enheter må holde følge med CPU og RAM, noe som i praksis ikke er gjennomførbart. En av fordelen med isolated IO er da at CPU og RAM kan øke frekvensen på adresse busen utover det IO enheter klarer. Dette lar RAM og CPU "snakke" sammen i et større tempo, noe som igjen gir høyere ytelse. 
 I dag har vi derfor endt opp med ( på x86 arkitekturen ) flere forskjellige bus varianter for forskjellig bruk, SATA til disker/optiske enheter, PCI express til expansjonskort ( med forskjellige størrelse for forskjellige mengder data ) og av det aller nyeste har vi fått M.2 disker som bruker PCI express interfacet.  \url{http://en.wikipedia.org/w/index.php?title=Special:CiteThisPage&page=Bus_%28computing%29&id=651785312}
@@ -29,18 +29,22 @@ I dag har vi derfor endt opp med ( på x86 arkitekturen ) flere forskjellige bus
 
 %Isolated I/O
 
-\subsubsection{2. På en harddisk, hvor mange bytes finnes som regel i en sektor? Hva er en sylinder? Hva er typisk gjennomsnittlig aksesstid for en disk i dag? Hva er overføringsraten (ca, i MB/s) mellom diskplate og buffer?}
+\subsubsection{På en harddisk, hvor mange bytes finnes som regel i en sektor? Hva er en sylinder? Hva er typisk gjennomsnittlig aksesstid for en disk i dag? Hva er overføringsraten (ca, i MB/s) mellom diskplate og buffer?}
 
 Som regel er det 512 bytes per sektor, men med "Advanced Format" er det på nyere disker vanlig med 4096 bytes per sektor. \url{http://en.wikipedia.org/w/index.php?title=Disk_sector&oldid=630789565}
 En sylinder er det vertikale settet med sektorer på tvers av platene inne i en HDD.
 I følge OS kompendiumet har en gjennomsnittlig disk i dag 4.2 ms aksesstid og en overføringsrate på ca 
 
-512 bytes per sektor
+512 bytes per sektor, 1 sektor tar 1,4 $\mu$s. Det er ca 714 286 sektorer per sekund. Som gir oss $714 286 * 512$ bytes som igjen er 365714432 bytes eller 348MB som human-readable-bytes.sh skriptet sier. Dette gir en overføringshastighet på 348 MB/s mellom diskplate og buffer.
 
-\subsubsection{3. Hva oppnår vi med å koble diskene som RAID disker? Hvordan er diskene organisert på RAID-level 1. Forklar hvordan diskene er organisert på RAID-level 5.}
+\subsubsection{Hva oppnår vi med å koble diskene som RAID disker? Hvordan er diskene organisert på RAID-level 1. Forklar hvordan diskene er organisert på RAID-level 5.}
 
 Ved å koble disker sammen i RAID kan vi få flere fysiske disker til å fremstå som en logisk enhet for datamaskinen. Ved å gjøre dette kan vi få økt ytelse, økt redundans av data eller begge deler. Dette oppnår vi ved å enten stripe data mellom disker, vi deler opp en I/O operasjon over flere disker og får økt ytelse ettersom vi utnytter paralleliteten mellom diskene. Økt redundans får vi ved speiling eller paritetsfunksjonalitet. Speiling vil si at vi skriver den samme dataen til alle diskene som er satt opp for speiling(Raid 1). For eksempel ved et 2 disk Raid 1 oppsett vil både disk 1 og disk 2 lagre all data. Paritetsfunksjonaliten fungerer ved at vi striper dataen over $N - 1$ og bruker den n'te disken til å lagre paritetsinformasjonen. I praksis har man endt opp med at diskene roterer på hvilken som skal være paritetsdisken(Raid 5). For eksmpel ved et 3 disk Raid5 oppsett vil det første være disk 1 og 2 som tar imot dataen, mens disk 3 lagrer paritetsinformasjonen. Neste operasjon vil skrive dataen til disk 2 og 3 mens disk 1 lagrer paritetsinformasjonen. Og slik fortsetter det.  
-\subsubsection{4. Hvilke fire kriterier definerer et presist interrupt?}
-\subsubsection{5. Forklar forskjellen mellom HDD og SSD når det gjelder lesing, skriving/overskriving og sletting av filer. Hva er poenget med TRIM kommandoen?}
-\subsubsection{6. Hva betyr det at et operativsystem er tilpasset SSD disker (slik som f.eks. Windows 7 er).}
+
+\subsubsection{Hvilke fire kriterier definerer et presist interrupt?}
+
+
+
+\subsubsection{Forklar forskjellen mellom HDD og SSD når det gjelder lesing, skriving/overskriving og sletting av filer. Hva er poenget med TRIM kommandoen?}
+\subsubsection{Hva betyr det at et operativsystem er tilpasset SSD disker (slik som f.eks. Windows 7 er).}
 \end{document}
