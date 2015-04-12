@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage[norsk]{babel}
+\usepackage{listings}
 \DeclareUnicodeCharacter{00A0}{ }
 \setcounter{section}{10}
 
@@ -43,8 +44,49 @@ Ved å koble disker sammen i RAID kan vi få flere fysiske disker til å fremst�
 
 \subsubsection{Hvilke fire kriterier definerer et presist interrupt?}
 
+I kompendiumet blir disse fire kriteriene gitt: \\ 
+\begin{verbatim}
+1. PC lagres på et kjent sted
+2. Alle instruksjoner før PC er ferdig 
+3. Ingen instruksjoner etter PC er kjørt 
+4. Kjent tilstand for PC-instruksjonen
+\end{verbatim}
 
+PC er forkotelsen til program counter, som er informasjon om hvor langt prossesoren har kommet i ekskiveringsløpet av en process. For å få et presist interrupt må denne lagres på et kjent sted, slik at man kan finne den igjen, alle instruksjonene opp til program counteren må være ferdig kjørt, ingen instruksjoner som kommer etter program counteren kan ha kjørt. Den instruksjonen program counteren peker på kan være ferdig eller ikke vært påbegynt, men dette må da gjøres tydelig. 
 
 \subsubsection{Forklar forskjellen mellom HDD og SSD når det gjelder lesing, skriving/overskriving og sletting av filer. Hva er poenget med TRIM kommandoen?}
+
+Lesing:
+Ettersom HDD har en mekanisk arm som må flyttes til det stedet på platen hvor den skal lese av data er det en relativt høy latency involvert med å finne dataen som skal leses. I en SSD finnes det ingen slik mekanisk løsning, alt foregår elektronisk og det er dermed mulig å oppnå raskere respons tid. I tilegg til raskere responstid er det mulig å utnytte parallelitet mellom flere NAND brikker i samme disk og dermed få høy overføringshastighet også ( 100MB/s~ for HDD og opp mot 1000MB/s~ for M2. SSD).
+Skriving:
+Her har også HDD samme problemet som ved lesning, det er en relativt høy latency for å finne riktig sted å skrive, men når den først kommer dit og kan skrive sekvensielt så har den ca samme ytelse som ved lesing. Derimot ved "random-write" så stuper ytelsen ettersom store deler av tiden går med på å flytte lesearmen. SSDer derimot har ikke samme problemet og kan også her utnytte parallelitet til skriving. Det er heller ingen mekanisk latency som gjør at "random-write" lider like mye. Det som derimot skjer er at SSDen mister fordelen med parallelitet ettersom disk controlleren ikke sprer mindre writes ( 4KB ) utover flere NAND ICer. 
+Overskriving:
+På en SSD er det en blokk som er den minste enheten man kan slette, som består av flere pages ( pages er den minste enheten man kan skrive til/lese fra på en SSD ). Etter at en page er skrevet til så må den slettes igjen før den kan "overskrives" og hver sletting tærer på livstiden til en SSD. Dette vil si at vi ønsker minst mulig sletting/overskrivninger på en SSD. En av måtene dettes løses på er at SSDen ikke skriver over, men hvis det er mulig skriver til en ny page istedet for den som skulle overskrives. Kun hvis det ikke er mulig å skrive til en ny page vil SSDen skrive over den gamle.
+En HDD har ikke de samme problemene og skriver bare over den sektoren OSet har bedt den om å skrive over.
+Sletting:
+Ingen av disk variantene sletter noe, bortsett fra SSDen når det er absolutt nødvendig.
+
+TRIM:
+Poenget med TRIM kommandoen er å slippe ytelsestapet som oppstår ved overskriving av en page. Ettersom disken ikke sletter filer når du faktisk ber om det så vil overskriving kunne forekomme relativt ofte. Det TRIM kommandoen gjør er å "rydde opp" på disken i bakgrunnen. Når OSet markerer en page som slettet vil TRIM kommandoen lagre blokken som pagen var en del av i en cache, slette hele blokken og skrive tilbake det som ikke skulle slettes i blokken. Dette gjør at det "alltid" er tomme pages tilgjengelig for skriving når en ny fil kommer inn og man klarer å opprettholde ytelsen ved skriving til disk.
+
 \subsubsection{Hva betyr det at et operativsystem er tilpasset SSD disker (slik som f.eks. Windows 7 er).}
+
+At et OS er tilpasset SSDer vil si at det støtter TRIM kommandoen og at OSet klarer å skille på HDD vs SSD slike at det ikke prøver å defragmentere SSDen. I tilegg burde filsystemet sin blokkstørrelse sammensvare med SSDen sin page størrelse og disse burde være likestilte slik at en IO operasjon som kunne blitt behandlet av en page blir spred ut over flere pages.
+\subsection{Lab exercises}
+\subsubsection{Skriv en PowerShell-kommandolinje som skriver ut alle prosesser som har working set større enn 10MB. Det skal skrives ut prosessnavn, prosess-ID og working set-størrelse, sortert på working set-størrelse.}
+\begin{lstlisting}[breaklines]
+Get-Process | Where-Object {$_.WorkingSet -gt 10MB } | Sort-Object workingSet -Descending | Format-Table -Property ProcessName,Id,WorkingSet -AutoSize
+\end{lstlisting}
+\subsubsection{Lag et script myprocinfo.ps1 som gir brukeren følgende meny med tilhørende funksjonalitet: \\
+1 - Hvem er jeg og hva er navnet på dette scriptet? \\
+2 - Hvor lenge er det siden siste boot? \\
+3 - Hvor mange prosesser og tråder finnes? \\
+4 - Hvor mange context switch'er fant sted siste sekund? \\
+5 - Hvor stor andel av CPU-tiden ble benyttet i kernelmode og i usermode siste sekund? \\
+6 - Hvor mange interrupts fant sted siste sekund? \\
+9 - Avslutt dette scriptet \\
+Velg en funksjon:
+}
+
+
 \end{document}
