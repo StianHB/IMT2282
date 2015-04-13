@@ -141,8 +141,31 @@ Hvis vi kun ser på ressursen i kolonnen med x så kan x være 0 ettersom det fi
 \subsubsection{En prosess sin bruk av virtuelt og fysisk minne} \url{https://github.com/StianHB/IMT2282/blob/master/procmi.ps1}
 
 
-\section{Chapter 
+\section{Chapter 13}
+\setcounter{subsection}{5}
+\subsection{Theory questions}
 
+\subsubsection{Forklar påstanden til Popek og Goldberg fra 1974: A machine is virtualizable only if the sensitive instructions are a subset of the privileged instructions.}
+
+Det Popek og Goldberg mente var at det kun er mulig å virtualisere maskiner hvis de sensetive instruksjoner( instruksjoner som må utføres i kernel mode ) er et subset av de priviligerte instruksjonene. Dvs at alle sensetive instruksjoner fører til en trap(interrupt) og at VMM ( Virtual machine manager/Hypervisor ) tar seg av instruksjonen på en tilfredstillende måte.
+
+\subsubsection{Tanenbaum oppgave 7.16 VMware does binary translation one basic block at a time, then it executes the block and starts translating the next one. Could it translate the entire program in advance and then execute it? If so, what are the advantages and disadvantages of each technique?}
+
+I teorien kan det være mulig å binæroversette et helt program på forhånd, men det vil kreve at man finner alle veiene igjennom kodebasen og oversetter de. Det er ikke gitt at man finner alle veiene igjennom koden med en binæroversetteren. Om man klarer dette så er det en liten ytelsesfortjeneste ved førstegangs ekskvering, etter det blir alle oversetingen cachet og vil kunne gi ytelse opp mot ikke-virtualisert kode. Så ulempen med forhånds oversettning er at man ikke nødvendigvis finner alle steder man burde ha oversatt så man må uansett kjøre en binæroversetter under kjøringen av programmet. Ulempen med dynamisk binæroversettning er ytelsestapet ved første gangs ekskevering.
+
+\subsubsection{Forklar hvordan datamaskin arkitekturens beskyttelsesringer(protectionrings) benyttes ved virtualisering når virtualiseringsteknikken er binæroversetting (VMware’s teknologi).}
+
+Før x86 platformen fikk hardware støttet virtualisering benyttet man seg av annen teknologi som eksisterte på x86 platformen. Blant annet var det 4 beskyttelsesringer som var tilgjengelig, men bare to av de var i bruk ( Ring 0 til kernel space, ring 3 til user space ). Det man da gjorde var å la gjeste operativsystemet bruke ring 1 som sitt kernel space. Dette lot hypervisoren kontrollere kernel spacet til gjeste operativsystemet. Ulempen var ved type to hypervisorer som i utgangspunktet ikke hadde mulighet til å tilby ring 0 funksjonalitet til ring 1 ettersom det kjørte i ring 3, som en user space applikasjon på host operativsystemet. Dette løste man ved hjelp av en kernelmodul til hypervisoren som lot den få kjøre kode i ring 0 når den hadde behov for å virtualisere ring 0 for gjeste operativsystemet.
+
+\subsubsection{Hva karakteriserer en applikasjon som vil være utfordrende/problematisk å kjøre på en virtuell maskin?.}
+
+Applikasjoner som krever mye IO, f.eks et database system, vil kunne være utfordrene å virtualisere. Applikasjoner som trenger direkte kontroll over maskinvare, som f.eks spill som ønsker kontroll over grafikkort, kan også være utfordrene. 
+
+\subsubsection{Forklar kort fordeler og ulemper med shadowpage tables i forhold til nested/extended page tables.}
+
+
+
+\subsubsection{Forklar kort hvordan IOMMU kan være nyttig hardwarestøtte for virtualisering.}
 
 
 
