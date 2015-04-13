@@ -88,21 +88,39 @@ Get-Process | Where-Object {$_.WorkingSet -gt 10MB } | Sort-Object workingSet -D
 Velg en funksjon:
 }
 
-Løsning ligger her: 
+Løsning ligger her: \\
+\url{https://github.com/StianHB/IMT2282/blob/master/myprocinfo.ps1}
+ 
 \section{Chapter 12}
 \setcounter{subsection}{2}
 \subsection{Theory Questions}
 \subsubsection{Det kreves at fire ulike betingelser alle må være oppfylt for at deadlock skal inntre. Beskriv disse kort.}
-
-
+\begin{enumerate}
+\item Mutual exclusion \\ 
+Alle ressursene er enten låst til en prosess eller er tilgjengelig
+\item Hold and wait \\
+Prossesser som allerede har en ressurs men trenger flere kan spørre om å få de.
+\item No preemption \\
+Operativsystemet kan ikke ta tilbake ressurser fra prosseser, de må selv gi de fra seg.
+\item Circular wait \\
+Krever to eller flere prossesser som venter på hverandres ressurser i sirkel. A ønsker B sin, B ønsker A sin. Dette fører til at de venter på hverandre og aldri gir slipp. \\
+\end{enumerate}
 
 \subsubsection{Hva vil det si at en tilstand er “unsafe” i forbindelse med deadlock}
 
+En unsafe tilstand sier oss at en eller flere utføringsrekkefølger av prossessene kan føre til deadlock, men det er ikke gitt at vi havner der ettersom noen av utføringsrekkefølgene kan gjøre at alle prossessene fullføres og det ikke oppstår en deadlock.
+
 \subsubsection{Forklar kort hva en ressursgraf er og hvordan den kan benyttes til å avsløre om vi har en deadlock situasjon}
+
+En ressursgraf er en graf hvor man har kanter som avgjør om ressurser er tildelt prosseser, om en prosses forespørr en ressurs eller om en ressurs står ledig. Ved å simulere prossesers bruk av ressurser ved hjelp av grafer kan vi finne deadlock situasjoner når det oppstår sykler i grafen. 
 
 \subsubsection{Tanenbaum oppgave 6.2 Students working at individual PCs in a computer laboratory send their files to be printed by a server which spools the files on its hard disk. Under what conditions may a deadlock occur if the disk space for the print spool is limited? How may deadlock be avoided?}
 
+Vi kan få en deadlock i denne situasjonen hvis det blir sendt et dokument til serveren som er større enn det er ledig diskplass. Maskinen som sender filen vil ikke få fullført sin sending og alle de andre venter på at den skal bli ferdig. Gitt at vi har prosseser som følger hold and wait prinsippet og en server som ikke preempter ut printjobber den ikke fullfører. For å unngå deadlock i denne situasjonen kan man implementere \textit{Bankers algorithm for a single resource} evt rydde opp på disken til printserveren og bruke \textit{the ostrich algorithm}.
+
 \subsubsection{Tanenbaum oppgave 6.25 A computer has six tape drives, with n processes competing for them. Each process may need two drives. For which values of n is the system deadlock free?}
+
+Hvis vi bruker \textit{the ostrich algorithm} så kan vi ha opp til 5 prosseser ettersom det betyr at det alltid vil være mulig for 1 prosses å fullføre det den trenger. Så ved n <= 5 vil vi ha et deadlock fritt system.
 
 \subsubsection{A system has four processes and five allocatable resources. The current allocation and maximum needs are as follows: }
 \begin{verbatim}
@@ -112,8 +130,25 @@ ProcB  2 0 1 1 0  2 2 2 1 0
 ProcC  1 1 0 1 0  2 1 3 1 0
 ProcD  1 1 1 1 0  1 1 2 2 1
 \end{verbatim}
-What is the smallest value of x for which this is a safe state?
+What is the smallest value of x for which this is a safe state? \\
+Hvis vi kun ser på ressursen i kolonnen med x så kan x være 0 ettersom det finnes en rekkefølge hvor prossesene kan kjøre ferdig ( A -> B -> C -> D ) , men hvis vi skal se på alle kolonnen spiller det ingen rolle hvilken verdi x har ettersom ProcA aldri vil få oppfylt sitt behov for ressursen i kolonne 5.
+
+\subsection{Lab exercises}
+
+\subsubsection{Byte konvertering} \url{https://github.com/StianHB/IMT2282/blob/master/human-readable-bytes.ps1}
+\subsubsection{Nano sekund konvertering} \url{https://github.com/StianHB/IMT2282/blob/master/human-readable-ns.ps1}
+\subsubsection{Effektiv minneaksesstid} \url{https://github.com/StianHB/IMT2282/blob/master/compute-memory-access.ps1}
+\subsubsection{En prosess sin bruk av virtuelt og fysisk minne} \url{https://github.com/StianHB/IMT2282/blob/master/procmi.ps1}
 
 
-\
+\section{Chapter 
+
+
+
+
+
+
+
+
+
 \end{document}
