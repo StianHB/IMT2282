@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[9pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage[norsk]{babel}
@@ -18,8 +18,8 @@
 \maketitle
 
 \section{Chapter 11}
+\setcounter{subsection}{5}
 \subsection{Theory Questions}
-\setcounter{subsection}{6}
 \subsubsection{Hva er forskjellen på memory mapped og isolated I/O? Angi fordeler og ulemper med disse to prinsippene.}
 
 Memory mapped IO er når IO enheter ( disker osv ) deler samme adresse bus som RAM. Dette gjør at CPUen kan bruke de samme instruksjonene for å snakke til RAM som til IO enheter, noe som senker kompleksiteten ved bruk av IO. Isolated IO er da det motsatte, hvor IO enheter har en egen adresse bus og krever ett eget sett med instruksjoner når CPUen ønsker å sende data til IO enheter. Ulempen med Memory mapped IO er at alle enheter som er koblet på det samme bus interfacet må følge samme klokkefrekvens, dette gjør at IO enheter må holde følge med CPU og RAM, noe som i praksis ikke er gjennomførbart. En av fordelen med isolated IO er da at CPU og RAM kan øke frekvensen på adresse busen utover det IO enheter klarer. Dette lar RAM og CPU "snakke" sammen i et større tempo, noe som igjen gir høyere ytelse. 
@@ -88,5 +88,32 @@ Get-Process | Where-Object {$_.WorkingSet -gt 10MB } | Sort-Object workingSet -D
 Velg en funksjon:
 }
 
+Løsning ligger her: 
+\section{Chapter 12}
+\setcounter{subsection}{2}
+\subsection{Theory Questions}
+\subsubsection{Det kreves at fire ulike betingelser alle må være oppfylt for at deadlock skal inntre. Beskriv disse kort.}
 
+
+
+\subsubsection{Hva vil det si at en tilstand er “unsafe” i forbindelse med deadlock}
+
+\subsubsection{Forklar kort hva en ressursgraf er og hvordan den kan benyttes til å avsløre om vi har en deadlock situasjon}
+
+\subsubsection{Tanenbaum oppgave 6.2 Students working at individual PCs in a computer laboratory send their files to be printed by a server which spools the files on its hard disk. Under what conditions may a deadlock occur if the disk space for the print spool is limited? How may deadlock be avoided?}
+
+\subsubsection{Tanenbaum oppgave 6.25 A computer has six tape drives, with n processes competing for them. Each process may need two drives. For which values of n is the system deadlock free?}
+
+\subsubsection{A system has four processes and five allocatable resources. The current allocation and maximum needs are as follows: }
+\begin{verbatim}
+       Allocated  Maximum    Available
+ProcA  1 0 2 1 1  1 1 2 1 3  0 0 x 1 1
+ProcB  2 0 1 1 0  2 2 2 1 0
+ProcC  1 1 0 1 0  2 1 3 1 0
+ProcD  1 1 1 1 0  1 1 2 2 1
+\end{verbatim}
+What is the smallest value of x for which this is a safe state?
+
+
+\
 \end{document}
