@@ -163,15 +163,50 @@ Applikasjoner som krever mye IO, f.eks et database system, vil kunne være utfor
 
 \subsubsection{Forklar kort fordeler og ulemper med shadowpage tables i forhold til nested/extended page tables.}
 
-
+Shadow page tables er en software implementasjon for å kunne virtualisere minnebruk for guestOS og fungerer jevnt over bra. Det finnes noen edge/corner cases hvor kostnaden på å bruke shadow page tables er dyre, som f.eks ved virtualisering av applikasjoner som bruker mye minne. Nested/extended page tables er en hardware implementasjon som tillater virtualisering av minne til guestOS. Denne implementasjonen er på papiret ikke like rask som SPT, men man kan løse det ved å "kaste" raskere hardware på problemet. 
 
 \subsubsection{Forklar kort hvordan IOMMU kan være nyttig hardwarestøtte for virtualisering.}
 
+Med IOMMU kan man gi guestOS direkte tilgang til en I/O enhet og la mappingen gjøre at guestOS direkte kan bruke og få tilbakemelding(interrupts) fra IO enheter.
+
+
+\subsection{Lab exercises}
 
 
 
+\subsubsection{Informasjon om deler av filsystemet.}
+\begin{verbatim}
+Skriv et script fsinfo.ps1 som tar en directory som argument og skriver ut
+• Hvor stor del av partisjonen directorien befinner seg på som er full
+• Hvor mange filer (utelat alle directories!) finnes i directorien 
+  (inkl subdirectorier), gjennomsnittlig filstørrelse, 
+  og full path og størrelse til den største filen 
+Eksempel kjøring:
 
+$ fsinfo.ps1 cf3
+Partisjonen cf3 befinner seg på er 81.4456135970535% full Det finnes 4 filer.
+Den største er C:\Users\erikh\scripts\cf3\helloworld2.cf som er 302B stor.
+Gjennomsnittlig filstørrelse er 245.25B.
 
+$ pwd
+Path
+----
+C:\Users\erikh\scripts
+$ fsinfo.ps1 $(pwd)
+Partisjonen C:\Users\erikh\scripts befinner seg på er 81.4456135970535% full
+Det finnes 479 filer.
+Den største er C:\Users\erikh\scripts\Lessmsierables-20050611 \LessMSIerables\wix.dll som er 992KB stor.
+Gjennomsnittlig filstørrelse er 12.4778509916493KB.
+$
+\end{verbatim}
 
+Løsningen ligger her:\\
+\url{https://github.com/StianHB/IMT2282/blob/master/fnamecheck.ps1}
+
+\subsubsection{Regulære uttrykk anvendt på filsystemet.}
+Skriv et script fnamecheck.ps1 som tar en directory som argument og skriver ut alle filnavn (inkl alle subdirectories) som inneholder norske tegn og/eller mellomrom i filnavnet.
+
+Løsningen ligger her:\\
+\url{https://github.com/StianHB/IMT2282/blob/master/fsinfo.ps1}
 
 \end{document}
